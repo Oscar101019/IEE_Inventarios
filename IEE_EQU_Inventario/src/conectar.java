@@ -14,7 +14,7 @@ public class conectar {
     public Connection conexion(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            conectar=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/INE_Inventarios","root","");
+            conectar=DriverManager.getConnection("jdbc:mysql://127.0.0.1:8080/INE_Inventarios","root","");
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,e.getMessage());
         }
