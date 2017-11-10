@@ -19,38 +19,10 @@ VALUES
 ("No disponible"),
 ("Agotado"); 
 
-INSERT INTO puestos(Nom_Pues, Area_Pues) 
+INSERT INTO puestos(idPuesto,Nom_Pues, Area_Pues) 
 VALUES 
 ('Presidente','Presidencia'),
 ('Secretaria','Secretaria General');
 
-insert INTO almacen(Nombre_Alm,Disponibilidad_Alm)
-VALUES 
-("Almacen de Aministracion","S"),
-("Almacen de Informatica","S"),
-("Almacen General","S");
-
-
-
-insert INTO Car_Esp(Nombre_CarEsp)
-VALUES 
-("Ninguno"),
-("Vehiculo");
-
-
-insert INTO Datos_Esp(Nombre_Dat,Car_Esp_idCar_Esp)
-VALUES 
-("Km Recorridos",2),
-("Fecha Servicio",2),
-("Null",1);
-
-insert INTO Asignacion_Usr(Status_Asig)
-VALUES 
-("Asignado"),
-("Sin Asignar"),
-("Perdido"),
-("Null");
-
-  
-
+select idPuesto from puestos where Nom_Pues='Presidente';
 
