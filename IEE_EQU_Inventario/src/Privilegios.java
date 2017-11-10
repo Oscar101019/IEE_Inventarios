@@ -43,11 +43,12 @@ public class Privilegios extends javax.swing.JFrame {
     void mostrartabla(){
        
             DefaultTableModel modelo= new DefaultTableModel();
+            modelo.addColumn("idPersona");
             modelo.addColumn("Nombre");
-            modelo.addColumn("RFC");
+            
             tabladatos.setModel(modelo);
             
-            String sql="SELECT CONCAT(Nombre_Per, ' ', Ape_Pat_Per,' ',Ape_Mat_Per) As Nombre , RFC_Emp From Persona INNER JOIN Empleado WHERE Persona.idPersona= Empleado.Persona_idPersona";
+            String sql="SELECT idPersona,Nombre_Per FROM Persona";
             
             String datos[] = new String [2];
            try {
@@ -56,6 +57,7 @@ public class Privilegios extends javax.swing.JFrame {
             while(rs.next()){
                 datos [0]=rs.getString(1);
                  datos [1]=rs.getString(2);
+                 
             modelo.addRow(datos);
             }
             tabladatos.setModel(modelo);
@@ -75,25 +77,25 @@ public class Privilegios extends javax.swing.JFrame {
        
             DefaultComboBoxModel modelo = new DefaultComboBoxModel();
            
-            cmbareaa.setModel(modelo);
-            String p = cmbarea.getSelectedItem().toString();
+            cmbarea.setModel(modelo);
+            String p = cmbpuesto.getSelectedItem().toString();
            String sql="SELECT Area_Pues FROM Puestos WHERE Nom_Pues = '"+p+ "'        ";
             //String sql = "SELECT Area_Pues FROM personas GROPU BY Area_Pues"   ;
             
             ArrayList datos[] = new ArrayList [1];
            modelo.addElement("Seleccione un Area");
-            cmbareaa.setModel(modelo);
+            cmbarea.setModel(modelo);
             
             try {
                Statement st = cn.createStatement();
             ResultSet rs= st.executeQuery(sql);
             while(rs.next()){
                 modelo.addElement(rs.getObject("Area_Pues"));
-                cmbareaa.setModel(modelo);
+                cmbarea.setModel(modelo);
                  
             
             }
-            cmbareaa.setModel(modelo);
+            cmbarea.setModel(modelo);
         } catch (SQLException ex) {
             Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -107,26 +109,26 @@ void mostrarcombopuesto(){
        
             DefaultComboBoxModel modelo2 = new DefaultComboBoxModel();
             
-             String a = cmbareaa.getSelectedItem().toString();
-            cmbarea.setModel(modelo2);
+             String a = cmbarea.getSelectedItem().toString();
+            cmbpuesto.setModel(modelo2);
             
             
             String sql="SELECT Nom_Pues FROM Puestos GROUP BY Nom_Pues" ;
             
             ArrayList datos2[] = new ArrayList [1];
            modelo2.addElement("Seleccione un Puesto");
-            cmbarea.setModel(modelo2);
+            cmbpuesto.setModel(modelo2);
             
             try {
                Statement st = cn.createStatement();
             ResultSet rs= st.executeQuery(sql);
             while(rs.next()){
                 modelo2.addElement(rs.getObject("Nom_Pues"));
-                cmbarea.setModel(modelo2);
+                cmbpuesto.setModel(modelo2);
                  
             
             }
-            cmbarea.setModel(modelo2);
+            cmbpuesto.setModel(modelo2);
         } catch (SQLException ex) {
             Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -165,7 +167,6 @@ void mostrarcombopuesto(){
         txtcalle = new javax.swing.JTextField();
         txtcolonia = new javax.swing.JTextField();
         txtcp = new javax.swing.JTextField();
-        btnAgregar = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel36 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -187,10 +188,11 @@ void mostrarcombopuesto(){
         jSeparator4 = new javax.swing.JSeparator();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        cmbareaa = new javax.swing.JComboBox<String>();
         cmbarea = new javax.swing.JComboBox<String>();
+        cmbpuesto = new javax.swing.JComboBox<String>();
         jLabel20 = new javax.swing.JLabel();
         cmbtusuario = new javax.swing.JComboBox<String>();
+        btnAgregar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/banner.png"))); // NOI18N
@@ -312,13 +314,6 @@ void mostrarcombopuesto(){
             }
         });
 
-        btnAgregar.setText("Agregar");
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-
         jButton6.setText("Limpiar");
 
         jLabel36.setForeground(new java.awt.Color(255, 0, 0));
@@ -374,7 +369,14 @@ void mostrarcombopuesto(){
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(94, 94, 94))
+            .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,19 +387,8 @@ void mostrarcombopuesto(){
                             .addComponent(txtnolic, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
                             .addComponent(txtcred)))
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
@@ -477,11 +468,9 @@ void mostrarcombopuesto(){
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(txtcred, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregar)
-                    .addComponent(jButton6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
+                .addComponent(jButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(jLabel36)
                 .addContainerGap())
         );
@@ -523,24 +512,7 @@ void mostrarcombopuesto(){
 
         jLabel19.setText("Puesto");
 
-        cmbareaa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Escoja uno", "Direccion", "Informatica", "Administración" }));
-        cmbareaa.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbareaaItemStateChanged(evt);
-            }
-        });
-        cmbareaa.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                cmbareaaFocusLost(evt);
-            }
-        });
-        cmbareaa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbareaaActionPerformed(evt);
-            }
-        });
-
-        cmbarea.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar area" }));
+        cmbarea.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Escoja uno", "Direccion", "Informatica", "Administración" }));
         cmbarea.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbareaItemStateChanged(evt);
@@ -551,20 +523,37 @@ void mostrarcombopuesto(){
                 cmbareaFocusLost(evt);
             }
         });
-        cmbarea.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cmbareaMouseClicked(evt);
-            }
-        });
         cmbarea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbareaActionPerformed(evt);
             }
         });
 
+        cmbpuesto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar area" }));
+        cmbpuesto.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbpuestoItemStateChanged(evt);
+            }
+        });
+        cmbpuesto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cmbpuestoFocusLost(evt);
+            }
+        });
+        cmbpuesto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmbpuestoMouseClicked(evt);
+            }
+        });
+        cmbpuesto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbpuestoActionPerformed(evt);
+            }
+        });
+
         jLabel20.setText("Tipo de Usuario");
 
-        cmbtusuario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione" }));
+        cmbtusuario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Comun", "Administrador" }));
         cmbtusuario.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbtusuarioItemStateChanged(evt);
@@ -586,6 +575,13 @@ void mostrarcombopuesto(){
             }
         });
 
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -596,25 +592,18 @@ void mostrarcombopuesto(){
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtsueldo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cmbarea, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(103, 103, 103)
-                                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(cmbareaa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtrfc, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(103, 103, 103)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbpuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtrfc, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -622,7 +611,12 @@ void mostrarcombopuesto(){
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbarea, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(245, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -634,19 +628,19 @@ void mostrarcombopuesto(){
                     .addComponent(txtrfc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(cmbareaa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel18)
+                    .addComponent(cmbarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbarea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18))
-                .addGap(11, 11, 11)
+                    .addComponent(jLabel19)
+                    .addComponent(cmbpuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
                         .addComponent(txtsueldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(52, 52, 52)
+                .addGap(62, 62, 62)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel20))
@@ -654,7 +648,9 @@ void mostrarcombopuesto(){
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(txtcontraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 238, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addComponent(btnAgregar)
+                .addGap(0, 140, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Empleado", jPanel3);
@@ -712,7 +708,7 @@ void mostrarcombopuesto(){
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
 
         String nombre,appat,apmat,calle,id,colonia,cp,usuario,contraseña,telefono,rfc,nolic,nocred,area,puesto,sueldo;
-        String sql="",sql2="",sql3="";
+        String sql="",sql2="",sql3="",sql4="";
 
         nombre = txtnombre.getText();
         appat = txtpaterno.getText();
@@ -724,10 +720,13 @@ void mostrarcombopuesto(){
         nolic= txtnolic.getText();
         nocred= txtcred.getText();
         sueldo=txtsueldo.getText();
+        contraseña= txtcontraseña.getText();
+        usuario=cmbtusuario.getSelectedItem()+"";
+        puesto=cmbarea.getSelectedIndex()+"";
 
         rfc=txtrfc.getText();
 
-        int idpue1;
+        
         int idpersona1;
 
         sql="INSERT INTO Persona (Nombre_Per,Ape_Pat_Per,Ape_Mat_Per,Calle_Per,Colonia_Per,CP_Per,Tel_Per,NoLic_Per,NoCred_Per) VALUES(?,?,?,?,?,?,?,?,?)";
@@ -751,16 +750,37 @@ void mostrarcombopuesto(){
             Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+         mostrartabla();
+         
+                 sql4="INSERT INTO Empleado (RFC_Emp,sueldo_Emp,Puestos_idPuesto,Persona_idPersona) VALUES(?,?,?,?)";
 
         try{
-            // String idpersona ="SELECT idPersona FROM Persona WHERE Nombre_Per ='"+nombre+"' and Ape_Pat_Per = '"+appat+"' and Ape_Mat_Per = '"+apmat+"' ";
+            //String idpersona ="SELECT idPersona FROM Persona WHERE Nombre_Per ='"+nombre+"' and Ape_Pat_Per = '"+appat+"' and Ape_Mat_Per = '"+apmat+"' ";
             // String idpuesto = "SELECT idPuesto FROM Puestos WHERE Nom_Pues ='"+p+"' and Area_Pues = '"+a+"' ";
-
-            String a = cmbareaa.getSelectedItem().toString();
-            String p = cmbarea.getSelectedItem().toString();
-
+           // String idpersona ="SELECT idPersona FROM Persona WHERE idPersona = (SELECT MAX(idPersona) from Persona)";
+            String a = cmbarea.getSelectedItem().toString();
+            String p = cmbpuesto.getSelectedItem().toString();
+            String f;
             Statement statement = cn.createStatement();
+            
+int idpue1=tabladatos.getRowCount();
+f=tabladatos.getValueAt(idpue1-1,0)+"";
 
+
+            ResultSet idper = statement.executeQuery("SELECT idPersona FROM Persona WHERE idPersona = (SELECT MAX(idPersona) from Persona)");
+            String idpersona=f;
+            PreparedStatement pst= cn.prepareStatement(sql4);
+
+            pst.setString( 1,rfc );
+            pst.setString( 2,sueldo);
+            pst.setString( 3,puesto);
+            pst.setString( 4,idpersona );
+            
+            int n=pst.executeUpdate();
+            if(n>0){JOptionPane.showMessageDialog(null, "Se inserto en tabla:Empleado");}
+            
+           // Statement statement = cn.createStatement();
+/*
             ResultSet obteneridpue2 = statement.executeQuery("SELECT idPuesto FROM Puestos WHERE Nom_Pues ='"+p+"' and Area_Pues = '"+a+"' ");
             ResultSet obteneridpersona = statement.executeQuery("SELECT idPersona FROM Persona WHERE Nombre_Per ='"+nombre+"' and Ape_Pat_Per = '"+appat+"' and Ape_Mat_Per = '"+apmat+"' ");
             while (obteneridpersona.next() ) {
@@ -775,7 +795,7 @@ void mostrarcombopuesto(){
                 ResultSet insertar = statement.executeQuery("INSERT INTO Empleado (RFC_Emp,sueldo_Emp,Puestos_idPuesto) VALUES('"+ rfc+"','"+sueldo+"','"+ idpue1 +"')");
 
             }
-
+*/
         }
 
         catch (NumberFormatException nfe) {
@@ -785,22 +805,49 @@ void mostrarcombopuesto(){
             Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
 
         }
+sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)";
+        try{
+            PreparedStatement pst= cn.prepareStatement(sql3);
 
+            pst.setString( 1,contraseña );
+            pst.setString( 2,usuario);
+            pst.setString( 3,rfc );
+           
+
+            int n=pst.executeUpdate();
+            if(n>0){JOptionPane.showMessageDialog(null, "Se inserto en tabla:Usuario");}
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
         mostrartabla();
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void cmbareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbareaActionPerformed
+    private void cmbpuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbpuestoActionPerformed
         mostrarcomboarea();
 
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbareaActionPerformed
+    }//GEN-LAST:event_cmbpuestoActionPerformed
 
-    private void cmbareaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbareaMouseClicked
+    private void cmbpuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbpuestoMouseClicked
 
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbareaMouseClicked
+    }//GEN-LAST:event_cmbpuestoMouseClicked
+
+    private void cmbpuestoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbpuestoFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbpuestoFocusLost
+
+    private void cmbpuestoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbpuestoItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbpuestoItemStateChanged
+
+    private void cmbareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbareaActionPerformed
+    
+    }//GEN-LAST:event_cmbareaActionPerformed
 
     private void cmbareaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbareaFocusLost
         // TODO add your handling code here:
@@ -808,20 +855,8 @@ void mostrarcombopuesto(){
 
     private void cmbareaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbareaItemStateChanged
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbareaItemStateChanged
-
-    private void cmbareaaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbareaaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbareaaActionPerformed
-
-    private void cmbareaaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbareaaFocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbareaaFocusLost
-
-    private void cmbareaaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbareaaItemStateChanged
-        // TODO add your handling code here:
         //cmbInit();
-    }//GEN-LAST:event_cmbareaaItemStateChanged
+    }//GEN-LAST:event_cmbareaItemStateChanged
 
     private void txtcredKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcredKeyPressed
         // TODO add your handling code here:
@@ -949,7 +984,7 @@ void mostrarcombopuesto(){
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JComboBox<String> cmbarea;
-    private javax.swing.JComboBox<String> cmbareaa;
+    private javax.swing.JComboBox<String> cmbpuesto;
     private javax.swing.JComboBox<String> cmbtusuario;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton6;
