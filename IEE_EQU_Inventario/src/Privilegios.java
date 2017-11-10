@@ -34,11 +34,18 @@ public class Privilegios extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         mostrartabla();
+        mostrartabla2();
         mostrarcomboarea();
         mostrarcombopuesto();
+        tipoUsuario();
 
-        
+        jTable1.setVisible(false);
+        jTabbedPane2.setEnabledAt(2,false);
+       
+    
     }
+    
+    
 
     void mostrartabla(){
        
@@ -69,18 +76,51 @@ public class Privilegios extends javax.swing.JFrame {
     
 }
     
+    void mostrartabla2(){
+       
+            DefaultTableModel modelo= new DefaultTableModel();
+            modelo.addColumn("idPersona");
+            modelo.addColumn("Nombre");
+            
+            jTable1.setModel(modelo);
+            
+            String sql="SELECT idPersona,Nombre_Per FROM Persona";
+            
+            String datos[] = new String [2];
+           try {
+               Statement st = cn.createStatement();
+            ResultSet rs= st.executeQuery(sql);
+            while(rs.next()){
+                datos [0]=rs.getString(1);
+                 datos [1]=rs.getString(2);
+                 
+            modelo.addRow(datos);
+            }
+            jTable1.setModel(modelo);
+        } catch (SQLException ex) {
+            Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+    
+}
+    
     
      
      
      
     void mostrarcomboarea(){
        
-            DefaultComboBoxModel modelo = new DefaultComboBoxModel();
+           
+    
+    
+    DefaultComboBoxModel modelo = new DefaultComboBoxModel();
            
             cmbarea.setModel(modelo);
-            String p = cmbpuesto.getSelectedItem().toString();
-           String sql="SELECT Area_Pues FROM Puestos WHERE Nom_Pues = '"+p+ "'        ";
-            //String sql = "SELECT Area_Pues FROM personas GROPU BY Area_Pues"   ;
+             
+           
+           String sql="SELECT Area_Pues FROM Puestos GROUP BY Area_Pues       ";
+            
             
             ArrayList datos[] = new ArrayList [1];
            modelo.addElement("Seleccione un Area");
@@ -99,9 +139,6 @@ public class Privilegios extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    
-    
 }
      
     
@@ -113,7 +150,7 @@ void mostrarcombopuesto(){
             cmbpuesto.setModel(modelo2);
             
             
-            String sql="SELECT Nom_Pues FROM Puestos GROUP BY Nom_Pues" ;
+            String sql="SELECT Nom_Pues FROM Puestos  where Area_Pues = '"+ a+"'   " ;
             
             ArrayList datos2[] = new ArrayList [1];
            modelo2.addElement("Seleccione un Puesto");
@@ -136,7 +173,19 @@ void mostrarcombopuesto(){
     
     
 }
-     
+    
+
+void tipoUsuario(){
+        try {
+            Statement statement = cn.createStatement();
+            ResultSet usuario = statement.executeQuery("SELECT Nombre_TipoUsr FROM Tipo_Usr");
+            while (usuario.next()) {
+                cmbtusuario.addItem(usuario.getString(1));
+            }//FIN WHILE
+        }catch (SQLException ex) {
+            Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
      
     
     @SuppressWarnings("unchecked")
@@ -152,6 +201,8 @@ void mostrarcombopuesto(){
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabladatos = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -178,6 +229,7 @@ void mostrarcombopuesto(){
         txtcred = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
+        btnSiguiente = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         txtcontraseña = new javax.swing.JTextField();
@@ -225,33 +277,52 @@ void mostrarcombopuesto(){
         ));
         jScrollPane1.setViewportView(tabladatos);
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                        .addComponent(jButton1)
+                        .addGap(82, 82, 82)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1)
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Usuarios", jPanel2);
@@ -260,7 +331,7 @@ void mostrarcombopuesto(){
 
         jLabel7.setText("Nombre");
 
-        jLabel8.setText("Ap. Panterno");
+        jLabel8.setText("Ap. Paterno");
 
         jLabel9.setText("Ap. Materno");
 
@@ -365,6 +436,13 @@ void mostrarcombopuesto(){
 
         jSeparator5.setToolTipText("Direccion");
 
+        btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
@@ -373,7 +451,9 @@ void mostrarcombopuesto(){
                 .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(59, 59, 59)
+                .addComponent(btnSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(94, 94, 94))
             .addGroup(jPanel9Layout.createSequentialGroup()
@@ -469,7 +549,9 @@ void mostrarcombopuesto(){
                     .addComponent(jLabel17)
                     .addComponent(txtcred, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
-                .addComponent(jButton6)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton6)
+                    .addComponent(btnSiguiente))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(jLabel36)
                 .addContainerGap())
@@ -512,7 +594,6 @@ void mostrarcombopuesto(){
 
         jLabel19.setText("Puesto");
 
-        cmbarea.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Escoja uno", "Direccion", "Informatica", "Administración" }));
         cmbarea.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbareaItemStateChanged(evt);
@@ -529,7 +610,6 @@ void mostrarcombopuesto(){
             }
         });
 
-        cmbpuesto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar area" }));
         cmbpuesto.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbpuestoItemStateChanged(evt);
@@ -553,7 +633,7 @@ void mostrarcombopuesto(){
 
         jLabel20.setText("Tipo de Usuario");
 
-        cmbtusuario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Comun", "Administrador" }));
+        cmbtusuario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione Tipo" }));
         cmbtusuario.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbtusuarioItemStateChanged(evt);
@@ -721,7 +801,14 @@ void mostrarcombopuesto(){
         nocred= txtcred.getText();
         sueldo=txtsueldo.getText();
         contraseña= txtcontraseña.getText();
-        usuario=cmbtusuario.getSelectedItem()+"";
+        
+        
+        usuario=cmbtusuario.getSelectedIndex()+"";
+        
+        
+        
+        
+        
         puesto=cmbarea.getSelectedIndex()+"";
 
         rfc=txtrfc.getText();
@@ -805,7 +892,7 @@ f=tabladatos.getValueAt(idpue1-1,0)+"";
             Logger.getLogger(Privilegios.class.getName()).log(Level.SEVERE, null, ex);
 
         }
-sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)";
+sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr_idTipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)";
         try{
             PreparedStatement pst= cn.prepareStatement(sql3);
 
@@ -827,7 +914,7 @@ sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void cmbpuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbpuestoActionPerformed
-        mostrarcomboarea();
+        
 
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbpuestoActionPerformed
@@ -846,7 +933,7 @@ sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)
     }//GEN-LAST:event_cmbpuestoItemStateChanged
 
     private void cmbareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbareaActionPerformed
-    
+mostrarcombopuesto();    
     }//GEN-LAST:event_cmbareaActionPerformed
 
     private void cmbareaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbareaFocusLost
@@ -943,6 +1030,11 @@ sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbtusuarioActionPerformed
 
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        jTabbedPane2.setEnabledAt(2, true);
+        jTabbedPane2.setSelectedIndex(2);
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
   
     
     
@@ -983,6 +1075,7 @@ sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnSiguiente;
     private javax.swing.JComboBox<String> cmbarea;
     private javax.swing.JComboBox<String> cmbpuesto;
     private javax.swing.JComboBox<String> cmbtusuario;
@@ -1014,10 +1107,12 @@ sql3="INSERT INTO Usuario (Password_Usr,Tipo_Usr,Empleado_RFC_Emp) VALUES(?,?,?)
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTable tabladatos;
     private javax.swing.JTextField txtbuscar;
     private javax.swing.JTextField txtcalle;
